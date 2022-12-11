@@ -1925,6 +1925,13 @@ impl Ui {
     ) -> InnerResponse<R> {
         self.with_layout_dyn(Layout::top_down(Align::Center), Box::new(add_contents))
     }
+    #[inline]
+    pub fn vertical_centered_bottom_up<R>(
+        &mut self,
+        add_contents: impl FnOnce(&mut Ui) -> R,
+    ) -> InnerResponse<R> {
+        self.with_layout_dyn(Layout::bottom_up(Align::Center), Box::new(add_contents))
+    }
 
     /// Start a ui with vertical layout.
     /// Widgets will be horizontally centered and justified (fill full width).
