@@ -31,6 +31,7 @@ pub struct Window<'open> {
     scroll: ScrollArea,
     collapsible: bool,
     with_title_bar: bool,
+    default_collapsed: bool,
 }
 
 impl<'open> Window<'open> {
@@ -52,6 +53,7 @@ impl<'open> Window<'open> {
             scroll: ScrollArea::neither(),
             collapsible: true,
             with_title_bar: true,
+            default_collapsed: false,
         }
     }
 
@@ -198,6 +200,13 @@ impl<'open> Window<'open> {
         self
     }
 
+    /// Should the window be collapsed by default
+    /// 
+    pub fn default_collapsed(mut self, default_collapsed: bool) -> Self {
+        self.default_collapsed = default_collapsed;
+        self
+    }
+
     /// Not resizable, just takes the size of its contents.
     /// Also disabled scrolling.
     /// Text will not wrap, but will instead make your window width expand.
@@ -258,6 +267,7 @@ impl<'open> Window<'open> {
             scroll,
             collapsible,
             with_title_bar,
+            default_collapsed,
         } = self;
 
         let frame = frame.unwrap_or_else(|| Frame::window(&ctx.style()));
@@ -273,7 +283,7 @@ impl<'open> Window<'open> {
         let area_layer_id = area.layer();
         let resize_id = area_id.with("resize");
         let mut collapsing =
-            CollapsingState::load_with_default_open(ctx, area_id.with("collapsing"), true);
+            CollapsingState::load_with_default_open(ctx, area_id.with("collapsing"), !default_collapsed);
 
         let is_collapsed = with_title_bar && !collapsing.is_open();
         let possible = PossibleInteractions::new(&area, &resize, is_collapsed);
