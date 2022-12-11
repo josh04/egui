@@ -147,7 +147,6 @@ impl Resize {
         self.default_size = size;
         self.min_size = size;
         self.max_size = size;
-        self.resizable = false;
         self
     }
 
@@ -287,6 +286,7 @@ impl Resize {
             // Probably a window.
             state.last_content_size
         };
+        
         ui.advance_cursor_after_rect(Rect::from_min_size(content_ui.min_rect().min, size));
 
         // ------------------------------
